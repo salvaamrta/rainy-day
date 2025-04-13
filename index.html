@@ -191,6 +191,18 @@
       margin-top: 1rem;
     }
 
+    button:hover {
+      background: #a67bdc;
+      transition: background 0.3s ease, transform 0.2s ease;
+      transform: scale(1.05);
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+
+
     select {
       padding: 0.5rem;
       border-radius: 6px;
@@ -242,17 +254,18 @@
       <option value="900">15 minutes</option>
       <option value="1800">30 minutes</option>
       <option value="2700">45 minutes</option>
-      <option value="3600">60 minutes</option>
+      <option value="3600">1 hour</option>
     </select>
 
     <div class="circle" id="circle">
       <span id="time">15:00</span>
+      <div id="pauseLabel" style="font-size: 0.9rem; color: #a19a9a; margin-top: 1.4rem; display: none;">⏸ paused</div>
     </div>
 
     <div style="margin-top: 1rem;">
-      <button id="startBtn" onclick="startTimer()">▶️ Start</button>
-      <button onclick="pauseTimer()">⏸️ Pause</button>
-      <button onclick="resetTimer()">⏹️ Stop</button>
+      <button id="startBtn" onclick="startTimer()">▶️</button>
+      <button onclick="pauseTimer()">⏸️</button>
+      <button onclick="resetTimer()">⏹️</button>
     </div>    
   </div>
 
@@ -267,9 +280,21 @@
       const wind = document.getElementById('windAudio');
       const thunder = document.getElementById('thunderAudio');
 
-      if (rain.volume > 0) rain.play();
-      if (wind.volume > 0) wind.play();
-      if (thunder.volume > 0) thunder.play();
+      if (rain.volume > 0) {
+        rain.play()
+        .then(() => console.log("Rain playing"))
+        .catch(err => console.log("Rain play error:", err));
+      }
+      if (wind.volume > 0) {
+        wind.play()
+        .then(() => console.log("Wind playing"))
+        .catch(err => console.log("Wind play error:", err));
+      }
+      if (thunder.volume > 0) {
+        thunder.play()
+        .then(() => console.log("Thunder playing"))
+        .catch(err => console.log("Thunder play error:", err));
+      }
     }
 
     function pauseSounds() {
@@ -290,7 +315,6 @@
     const select = document.getElementById('duration');
     const circle = document.getElementById('circle');
     const startBtn = document.getElementById('startBtn');
-
     const toggleBtn = document.getElementById('modeToggle');
     const body = document.body;
     
@@ -298,6 +322,12 @@
       body.classList.toggle('night');
       toggleBtn.textContent = body.classList.contains('night') ? '🌞' : '🌙';
     });
+
+    startBtn.addEventListener('click', () => {
+      playSounds(); // trigger sounds IMMEDIATELY on click
+      startTimer(); // then start the timer
+      });
+
   
     function updateDisplay() {
       const min = String(Math.floor(seconds / 60)).padStart(2, '0');
@@ -324,7 +354,8 @@
         isRunning = true;
         isPaused = false;
         circle.classList.add('ticking');
-        startBtn.textContent = '▶️ Resume';
+        document.getElementById('pauseLabel').style.display = 'none';
+        startBtn.textContent = '▶️';
 
         playSounds();
 
@@ -343,6 +374,7 @@
       } else if (isPaused) {
         isPaused = false;
         circle.classList.add('ticking');
+        document.getElementById('pauseLabel').style.display = 'none';
         playSounds();
       }
     }
@@ -358,6 +390,8 @@
     function pauseTimer() {
       isPaused = true;
       circle.classList.remove('ticking');
+      pauseSounds();
+      document.getElementById('pauseLabel').style.display = 'block';
     }
   
     function resetTimer() {
@@ -366,14 +400,20 @@
       updateDisplay();
       isPaused = false;
       isRunning = false;
+      document.getElementById('pauseLabel').style.display = 'none';
       circle.classList.remove('ticking');
-      startBtn.textContent = '▶️ Start';
+      startBtn.textContent = '▶️';
+      stopSounds();
     }
   
     // Set initial time on load
     window.onload = () => {
       seconds = parseInt(select.value);
       updateDisplay();
+      // Set default audio volume if not set by user yet
+      document.getElementById('rainAudio').volume = 0.5;
+      document.getElementById('windAudio').volume = 0.5;
+      document.getElementById('thunderAudio').volume = 0.5;
     };
   
     // Reset timer when dropdown value changes
@@ -390,7 +430,7 @@
 </body>
 
 <footer style="margin-top: 3rem; font-size: 0.9rem; color: #a19a9a;">
-  made with calm ☁️ | salvaamrta 🌷🫧</a>
+  <p>© 2025 salvaamrta 🌷🫧</p>
 </footer>
 
 </html>
