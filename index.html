@@ -10,6 +10,36 @@
       color: #403635;
       text-align: center;
       padding: 2rem;
+      background: linear-gradient(to bottom, #fdf6f0, #e6e4f0);
+      background-attachment: fixed;
+      animation: softRain 20s ease-in-out infinite;
+    }
+    @keyframes softRain {
+      0%, 100% { background-position: 0% 0%; }
+      50% { background-position: 0% 100%; }
+    }
+
+    @media (max-width: 500px) {
+      body {
+        padding: 1rem;
+      }
+      .circle {
+        width: 100px;
+        height: 100px;
+      }
+      button {
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+      button:hover {
+        background: #a67bdc;
+        transition: background 0.3s ease;
+      }
+    }
+
+    body.night {
+      background: #1e1f26;
+      color: #eee;
     }
 
     h1 {
@@ -62,6 +92,71 @@
     input[type="range"].thunder::-webkit-slider-thumb {
       background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><text y="1em" font-size="24">⚡</text></svg>') no-repeat center;
       background-size: contain;
+    }
+
+    .cloud {
+      position: fixed;
+      color: #fff;
+      text-shadow: 0 0 20px rgba(0,0,0,0.1);
+      pointer-events: none;
+    }
+    .cloud1 {
+      font-size: 3rem;
+      top: 10%;
+      left: -100px;
+      opacity: 0.4;
+      animation: floatCloud 60s linear infinite;
+    }
+    .cloud2 {
+      font-size: 2rem;
+      top: 20%;
+      left: -200px;
+      opacity: 0.6;
+      animation: floatCloud 75s linear infinite;
+    }
+    .cloud3 {
+      font-size: 3.5rem;
+      top: 40%;
+      left: -250px;
+      opacity: 0.5;
+      animation: floatCloud 70s linear infinite;
+    }
+    .cloud4 {
+      font-size: 2.5rem;
+      top: 50%;
+      left: -180px;
+      opacity: 0.4;
+      animation: floatCloud 80s linear infinite;
+    }
+    .cloud5 {
+      font-size: 3rem;
+      top: 70%;
+      left: -300px;
+      opacity: 0.5;
+      animation: floatCloud 90s linear infinite;
+    }
+    @keyframes floatCloud {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(150vw); /* Goes far beyond screen width */
+      }
+    }
+
+    #modeToggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      font-size: 1.8rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      z-index: 999; /* make sure it stays above other elements */
+      transition: transform 0.2s ease;
+    }
+    #modeToggle:hover {
+      transform: scale(1.2);
     }
 
     .timer-container {
@@ -117,6 +212,8 @@
 
   <h1>r a i n y - d a y ⛈️</h1>
 
+  <button id="modeToggle" aria-label="Toggle Day/Night Mode">🌙</button>
+
   <div class="slider-group">
     <label>rain</label>
     <input type="range" min="0" max="100" class="rain">
@@ -131,6 +228,13 @@
     <label>thunder</label>
     <input type="range" min="0" max="100" class="thunder">
   </div>
+
+  <div class="cloud cloud1">☁️</div>
+  <div class="cloud cloud2">☁️</div>
+  <div class="cloud cloud3">☁️</div>
+  <div class="cloud cloud4">☁️</div>
+  <div class="cloud cloud5">☁️</div>
+
 
   <div class="timer-container">
     <label for="duration">⏱️ Choose Duration:</label>
@@ -157,25 +261,73 @@
     let seconds = 900; // default to 15 minutes
     let isPaused = false;
     let isRunning = false;
-  
+
+    function playSounds() {
+      const rain = document.getElementById('rainAudio');
+      const wind = document.getElementById('windAudio');
+      const thunder = document.getElementById('thunderAudio');
+
+      if (rain.volume > 0) rain.play();
+      if (wind.volume > 0) wind.play();
+      if (thunder.volume > 0) thunder.play();
+    }
+
+    function pauseSounds() {
+      document.getElementById('rainAudio').pause();
+      document.getElementById('windAudio').pause();
+      document.getElementById('thunderAudio').pause();
+    }
+
+    function stopSounds() {
+      ['rainAudio', 'windAudio', 'thunderAudio'].forEach(id => {
+        const audio = document.getElementById(id);
+        audio.pause();
+        audio.currentTime = 0; // rewind to start
+      });
+    }
+
     const display = document.getElementById('time');
     const select = document.getElementById('duration');
     const circle = document.getElementById('circle');
     const startBtn = document.getElementById('startBtn');
+
+    const toggleBtn = document.getElementById('modeToggle');
+    const body = document.body;
+    
+    toggleBtn.addEventListener('click', () => {
+      body.classList.toggle('night');
+      toggleBtn.textContent = body.classList.contains('night') ? '🌞' : '🌙';
+    });
   
     function updateDisplay() {
       const min = String(Math.floor(seconds / 60)).padStart(2, '0');
       const sec = String(seconds % 60).padStart(2, '0');
       display.textContent = `${min}:${sec}`;
     }
+    document.querySelector('.rain').addEventListener('input', (e) => {
+      document.getElementById('rainAudio').volume = e.target.value / 100;
+    });
+    document.querySelector('.wind').addEventListener('input', (e) => {
+      document.getElementById('windAudio').volume = e.target.value / 100;
+    });
+    document.querySelector('.thunder').addEventListener('input', (e) => {
+      document.getElementById('thunderAudio').volume = e.target.value / 100;
+    });
   
     function startTimer() {
       if (!isRunning) {
+        if (!isPaused) {
+          seconds = parseInt(select.value);
+          updateDisplay();
+        }
+
         isRunning = true;
         isPaused = false;
         circle.classList.add('ticking');
         startBtn.textContent = '▶️ Resume';
-  
+
+        playSounds();
+
         countdown = setInterval(() => {
           if (!isPaused && seconds > 0) {
             seconds--;
@@ -185,13 +337,23 @@
             circle.classList.remove('ticking');
             isRunning = false;
             startBtn.textContent = '▶️ Start';
+            stopSounds();
           }
         }, 1000);
       } else if (isPaused) {
         isPaused = false;
         circle.classList.add('ticking');
+        playSounds();
       }
     }
+
+    window.addEventListener('load', () => {
+      const hour = new Date().getHours();
+      if (hour >= 18 || hour < 6) {
+        document.body.classList.add('night');
+      }
+    });
+
   
     function pauseTimer() {
       isPaused = true;
@@ -220,5 +382,15 @@
     });
   </script>
   
+  <audio id="rainAudio" src="sounds/rain.mp3" loop></audio>
+  <audio id="windAudio" src="sounds/wind.mp3" loop></audio>
+  <audio id="thunderAudio" src="sounds/thunder.mp3" loop></audio>
+
+  
 </body>
+
+<footer style="margin-top: 3rem; font-size: 0.9rem; color: #a19a9a;">
+  made with calm ☁️ | salvaamrta 🌷🫧</a>
+</footer>
+
 </html>
