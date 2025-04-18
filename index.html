@@ -320,7 +320,11 @@
     
     toggleBtn.addEventListener('click', () => {
       body.classList.toggle('night');
-      toggleBtn.textContent = body.classList.contains('night') ? '🌞' : '🌙';
+      if (body.classList.contains('night')) {
+        toggleBtn.textContent = '🌞'; // Sun icon for dark mode
+      } else {
+        toggleBtn.textContent = '🌙'; // Moon icon for light mode
+      }
     });
 
     startBtn.addEventListener('click', () => {
@@ -369,6 +373,7 @@
             isRunning = false;
             startBtn.textContent = '▶️ Start';
             stopSounds();
+            alert("Time's up!");
           }
         }, 1000);
       } else if (isPaused) {
@@ -383,7 +388,11 @@
       const hour = new Date().getHours();
       if (hour >= 18 || hour < 6) {
         document.body.classList.add('night');
+        toggleBtn.textContent = '🌞';  // Set to sun icon when in night mode
+      } else {
+        toggleBtn.textContent = '🌙';  // Set to moon icon when in day mode
       }
+
     });
 
   
