@@ -336,7 +336,7 @@
     function updateDisplay() {
       const min = String(Math.floor(seconds / 60)).padStart(2, '0');
       const sec = String(seconds % 60).padStart(2, '0');
-      display.textContent = ${min}:${sec};
+      display.textContent = `${min}:${sec}`;
     }
     document.querySelector('.rain').addEventListener('input', (e) => {
       document.getElementById('rainAudio').volume = e.target.value / 100;
