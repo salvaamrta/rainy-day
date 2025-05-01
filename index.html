@@ -6,6 +6,7 @@
   <title>🌧️ | rainy-day</title>
   <style>
     body {
+      margin: 0;
       font-family: 'Arial', sans-serif;
       background: #fdf6f0;
       color: #403635;
@@ -29,6 +30,10 @@
         height: 100px;
       }
       button {
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+      #modeToogle {
         width: 100%;
         margin-bottom: 0.5rem;
       }
@@ -159,6 +164,13 @@
     #modeToggle:hover {
       transform: scale(1.2);
     }
+    .button-group {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
 
     .timer-container {
       margin: 2rem 0;
@@ -263,7 +275,7 @@
       <div id="pauseLabel" style="font-size: 0.9rem; color: #a19a9a; margin-top: 1.4rem; display: none;">⏸ paused</div>
     </div>
 
-    <div style="margin-top: 1rem;">
+    <div class="button-group">
       <button id="startBtn" onclick="startTimer()">▶️</button>
       <button onclick="pauseTimer()">⏸️</button>
       <button onclick="resetTimer()">⏹️</button>
