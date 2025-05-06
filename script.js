@@ -1,4 +1,3 @@
-<script>
     let countdown;
     let seconds = 900; // default to 15 minutes
     let isPaused = false;
@@ -158,4 +157,3 @@
     select.addEventListener('change', () => {
       resetTimer();
     });
-  </script>
