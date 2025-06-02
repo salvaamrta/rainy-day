@@ -8,7 +8,7 @@ A Pomodoro timer to help you focus, breathe, and take things one task at a time.
 ## 🎮 How it Works
 - Set your focus durations (default: 15 mins focus).
 - Start your session — calming rain ambience included 🌧️
-- Adjust the volume of rain, wind, and thunder to suit your mood or needs ☁️🌬️⚡
+- Adjust the volume of 🌧️ rain, 🌬️ wind, and ⚡️ thunder to suit your mood or needs.
 
 ## 🛠️ Built With
 - HTML
