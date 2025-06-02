@@ -6,7 +6,7 @@ rain sounds. that's it ✌🏻
 A Pomodoro timer to help you focus, breathe, and take things one task at a time. Customize the sound of rain, wind, and thunder to suit your mood — whether you’re deep working or just chilling with a cup of tea ☕. Built with vanilla JavaScript, HTML, and CSS.
 
 ## 🎮 How it Works
-- Set your focus durations (default: 15 mins focus).
+- Set your focus durations (default: 15 mins focus but up to 1 hour).
 - Start your session — calming rain ambience included 🌧️
 - Adjust the volume of 🌧️ rain, 🌬️ wind, and ⚡️ thunder to suit your mood or needs.
 
