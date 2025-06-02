@@ -35,4 +35,4 @@ Feel free to use it, remix it, or share it with someone who needs a little rainy
 
 Pull requests and feedback are always welcome 🫶🏻
 
-Umm, actually I messed with the CSS here and there just to make it look better on mobile… kinda hacked my way through it 😅 Might review and clean the code later.
+Umm, actually I messed with the CSS here and there just trying to make it look better on mobile… but oh well kinda hacked my way through it 😅 Might review and clean the code later.
